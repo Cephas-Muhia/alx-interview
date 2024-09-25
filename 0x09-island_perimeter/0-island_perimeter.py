@@ -1,52 +1,26 @@
 #!/usr/bin/python3
-"""Island Perimeter - ALX Interview"""
 
-def check_val(x):
-        """_summary_
+""" Function to find perimiter of an island """
 
-        Args:
-            n (_type_): _description_
-
-        Returns:
-            _type_: _description_
-        """
-        if (x==0):
-            return 1
-        return 0
 
 def island_perimeter(grid):
-    """_summary_
-
-    Args:
-        grid (_type_): _description_
     """
-    
+    Input: List of Lists
+    Returns: Perimeter of the island
+    """
+    count = 0
     row = len(grid)
-    col = len(grid[0])
-    assert (1 <= row and col <= 100), "length must be between 1 an 100"
+    col = len(grid[0]) if row else 0
 
-    x = 0
-    for i in range(row):
-        for j in range(col):
-            assert (grid[i][j] == 0) or (grid[i][j] == 1),\
-                                        "grid numbers must be 0 or 1"
-            if grid[i][j] == 1:
-                if i-1 < 0:
-                    x += 1
-                else:
-                    x += check_val(grid[i-1][j])
-                if j-1 < 0:
-                    x += 1
-                else:
-                    x += check_val(grid[i][j-1])
+    for i in range(len(grid)):
+        for j in range(len(grid[i])):
 
-                try:
-                    x += check_val(grid[i+1][j])
-                except IndexError:
-                    x += 1
-                try:
-                    x += check_val(grid[i][j+1])
-                except IndexError:
-                    x += 1
+            idx = [(i - 1, j), (i, j - 1), (i, j + 1), (i + 1, j)]
+            check = [1 if k[0] in range(row) and k[1] in range(col) else 0
+                     for k in idx]
 
-    return x
+            if grid[i][j]:
+                count += sum([1 if not r or not grid[k[0]][k[1]] else 0
+                              for r, k in zip(check, idx)])
+
+    return (count)
